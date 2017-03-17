@@ -10,15 +10,39 @@ select::-ms-expand {
   display: none;
 }
 
-.smt-select-box-wrap{
+.smt-select-box{
+  position: relative;
+  width: 200px;
+  padding: 0 5px;
+  height: 38px;
+  line-height: 36px;
+  font-family: inherit;
+  border: 1px solid #999;
+  border-radius: 0;
+  box-sizing: border-box;
+}
+.smt-select-box:after{
+  position: absolute;
+  top: 0;
+  right: 5px;
+  content: '▼';
+  display: block;
+  font-size: 10px;
 }
 
 .smt-select-box select{
-  width: 200px; /* 원하는 너비설정 */
-  padding: .8em .5em; /* 여백으로 높이 설정 */
-  font-family: inherit;  /* 폰트 상속 */
-  border: 1px solid #999;
-  border-radius: 0px; /* iOS 둥근모서리 제거 */
-  /*background: url(이미지 경로) no-repeat 95% 50%;*/
+  width: 100%;
+  height: 100%;
+  font-family: inherit;
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
+}
+.smt-select-box select:focus{
+  outline: 0;
+}
+
+.smt-custom-select{
+  display: none;
 }
 

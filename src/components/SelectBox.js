@@ -8,7 +8,7 @@ class SelectBox extends  Component {
   render(){
 
     return (
-        <select name="" className="smt-custom-select" id="smtSelectBox">
+        <select name="" className="smt-select" id="smtSelectBox">
           <option value="01">aa</option>
         </select>
     );
