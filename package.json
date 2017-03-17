@@ -1,7 +1,7 @@
 {
-  "name": "lcj-smart-combobox",
+  "name": "lcj-combo",
   "version": "0.0.1",
-  "description": "smart combobox",
+  "description": "combobox",
   "main": "index.js",
   "style": "style.css",
   "scripts": {
