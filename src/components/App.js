@@ -3,11 +3,16 @@
  */
 
 import React, { Component } from 'react';
+import SelectBox from './SelectBox';
+import SelectCustomBox from './SelectCustomBox';
 
 class App extends Component {
   render(){
     return (
-        <h1>Hello React world!</h1>
+        <div className="smt-select-box">
+          <SelectBox />
+          <SelectCustomBox />
+        </div>
     );
   }
 }

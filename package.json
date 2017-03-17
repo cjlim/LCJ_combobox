@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "description": "smart combobox",
   "main": "index.js",
+  "style": "style.css",
   "scripts": {
-    "start": "webpack-dev-server --hot --host 0.0.0.0"
+    "start": "webpack-dev-server"
   },
   "keywords": [
     "combobox"
