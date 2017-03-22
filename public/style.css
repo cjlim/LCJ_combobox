@@ -21,14 +21,9 @@ ul,li{
 }
 
 .ljc-select-box{
-  position: relative;
-  width: 200px;
-  height: 38px;
-  line-height: 36px;
-  font-family: inherit;
-  border: 1px solid #999;
-  border-radius: 0;
-  box-sizing: border-box;
+  top: 50%;
+  left: 50%;
+  margin: -19px 0 0 -100px;
 }
 .ljc-select-box:after{
   position: absolute;
