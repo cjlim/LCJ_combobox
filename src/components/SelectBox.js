@@ -105,6 +105,7 @@ class SelectBox extends  Component {
                     name={option.name}
                     key={i}
                     optionKey={i}
+                    multiOption={this.props.multiple}
                     //isSelected={this._isSelected.bind(this)(i)}
                     onSelect={this._onSelect.bind(this)}
                   />
@@ -123,6 +124,8 @@ class SelectBox extends  Component {
 class SelectOptionItem extends  Component {
   constructor(props) {
     super(props);
+
+    console.log(this.props)
   }
 
   getListValue(e) {
@@ -138,7 +141,15 @@ class SelectOptionItem extends  Component {
     // };
 
     return(
-        <li data-optionValue={this.props.value} onClick={this.getListValue.bind(this)}>{this.props.name}</li>
+        <li data-optionValue={this.props.value} onClick={this.getListValue.bind(this)}>
+          {this.props.multiOption ?
+            <label>
+              <input type="checkbox" /> {this.props.name}
+            </label>
+            :
+            this.props.name
+          }
+        </li>
     );
   }
 }
