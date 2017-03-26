@@ -64,13 +64,9 @@ class SelectBox extends  Component {
     }
   }
 
-  // _isSelected(key){
-  //   if(this.state.selectedKey == key){
-  //     return true;
-  //   }else{
-  //     return false;
-  //   }
-  // }
+  _isSelectedArr(key){
+    // 선택된 option을 배열에 넣는다.
+  }
 
   render(){
 
@@ -106,7 +102,7 @@ class SelectBox extends  Component {
                     key={i}
                     optionKey={i}
                     multiOption={this.props.multiple}
-                    //isSelected={this._isSelected.bind(this)(i)}
+                    isSelectedArr={this._isSelectedArr.bind(this)(i)}
                     onSelect={this._onSelect.bind(this)}
                   />
                 );
@@ -125,29 +121,51 @@ class SelectOptionItem extends  Component {
   constructor(props) {
     super(props);
 
-    console.log(this.props)
+    this.state={
+      complete: (!!this.props.complete) || false
+    };
   }
 
   getListValue(e) {
     this.props.onSelect(this.props);
   }
 
+  handleChange(e){
+    console.log(event.target.checked)
+    //console.log(this.refs.optionCheck.state.isChecked)
+    // this.setState({
+    //   isChecked: !this.state.isChecked
+    // }, function() {
+    //   console.log(this.props);
+    // }.bind(this));
+
+    this.setState({
+      complete: !this.refs.complete.state.checked
+    });
+  }
+
   render() {
 
-    // let getChecked = isSelect => {
-    //   if(!isSelect) return;
-    //
-    //   return style;
-    // };
+    // 체크가 된 정보를 배열에 넣음.
+    let optionLabelStyle = {
+      display: 'block',
+      width: '100%',
+      height: '100%'
+    };
 
     return(
-        <li data-optionValue={this.props.value} onClick={this.getListValue.bind(this)}>
+        <li data-optionValue={this.props.value}>
           {this.props.multiOption ?
-            <label>
-              <input type="checkbox" /> {this.props.name}
+            <label style={optionLabelStyle}>
+              <input type="checkbox"
+                     defaultChecked={this.state.complete}
+                     ref="complete"
+                     onChange={this.handleChange}
+              />
+              {this.props.name}
             </label>
             :
-            this.props.name
+            <span style={optionLabelStyle} onClick={this.getListValue.bind(this)}>{this.props.name}</span>
           }
         </li>
     );
