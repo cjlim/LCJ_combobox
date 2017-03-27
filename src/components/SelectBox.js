@@ -4,6 +4,7 @@
 
 import React, { Component } from 'react';
 import { render } from 'react-dom';
+import update from 'react-addons-update'
 
 class SelectBox extends  Component {
   constructor(props) {
@@ -12,20 +13,22 @@ class SelectBox extends  Component {
     this.state={
       listVisible: false,
       listPositionTop: false,
+      selectBoxHeight: null,
       selectedValue: this.props.optionData[0].value,
       selectedName: this.props.optionData[0].name,
-      selectedKey: -1
+      selectedKey: -1,
+      selectedArray: []
     };
   }
 
   // 클릭시 높이값 계산
   setListPositionTop(box) {
-    let y = $(box).offset().top + $(box).height(),
+    let y = $(box).offset().top + $(box).outerHeight(),
         positionY = $( document ).height() - y,
         listHeight = $(".lcj-select-list").outerHeight();
 
     if(positionY < listHeight){
-      this.setState({ listPositionTop: true });
+      this.setState({ listPositionTop: true, selectBoxHeight: $(box).outerHeight()});
     }
 
   }
@@ -64,8 +67,38 @@ class SelectBox extends  Component {
     }
   }
 
-  _isSelectedArr(key){
-    // 선택된 option을 배열에 넣는다.
+  _isSelectedArr(data, isChecked){
+
+    let arrDate = {
+      index: data.optionKey,
+      name: data.name,
+      value: data.value,
+    };
+
+    if(isChecked){
+      // data update
+      this.setState({
+        selectedArray: update(
+            this.state.selectedArray,
+            {
+              $push: [arrDate]
+            }
+        )
+      });
+    }else{
+      //삭제하는 data의 인덱스를 구한다.
+      let index = this.state.selectedArray.findIndex(d => d.index === arrDate.index);
+
+      // data delete
+      this.setState({
+        selectedArray: update(
+            this.state.selectedArray,
+            {
+              $splice: [[index, 1]]
+            }
+        )
+      });
+    }
   }
 
   render(){
@@ -73,26 +106,40 @@ class SelectBox extends  Component {
     let selectStyle = {
       position: 'relative',
       width: '200px',
-      height: '38px',
-      lineHeight: '36px',
+      minHeight: '38px',
       fontFamily: 'inherit',
       border: '1px solid #999',
       borderRadius: 0,
       boxSizing: 'border-box'
     };
 
-    let listTop;
+    let listTop, boxHeight;
     if(this.state.listPositionTop){
-      listTop = "list-top"
+      listTop = "list-top";
+      boxHeight = this.state.selectBoxHeight;
     }else{
       listTop = ""
     }
 
+    let selectedNameArr = [];
+    let arrayLength = this.state.selectedArray.length;
+    if(arrayLength !== 0){
+      for (var i = 0; i < arrayLength; i++) {
+        selectedNameArr.push(this.state.selectedArray[i].name);
+      }
+    }
+
     return (
         <div className="ljc-select-box" style={selectStyle}>
-          <div className="lcj-select-label" onClick={this.toggleList.bind(this)}>{this.state.selectedValue}</div>
+          <div className="lcj-select-label" onClick={this.toggleList.bind(this)} >
+            {this.props.multiple ?
+              selectedNameArr.toString()
+              :
+              this.state.selectedValue
+            }
+          </div>
 
-          <div className={"lcj-select-list " + listTop} style={{display: + this.state.listVisible ? "block" : "none"}}>
+          <div className={"lcj-select-list " + listTop} style={{display: + this.state.listVisible ? "block" : "none", bottom: boxHeight}}>
             <ul>
               {this.props.optionData.map((option, i) => {
                 return (
@@ -102,8 +149,8 @@ class SelectBox extends  Component {
                     key={i}
                     optionKey={i}
                     multiOption={this.props.multiple}
-                    isSelectedArr={this._isSelectedArr.bind(this)(i)}
                     onSelect={this._onSelect.bind(this)}
+                    handleCheckboxChange={this._isSelectedArr.bind(this)}
                   />
                 );
               })}
@@ -120,33 +167,23 @@ class SelectBox extends  Component {
 class SelectOptionItem extends  Component {
   constructor(props) {
     super(props);
-
-    this.state={
-      complete: (!!this.props.complete) || false
-    };
   }
 
   getListValue(e) {
     this.props.onSelect(this.props);
   }
 
-  handleChange(e){
-    console.log(event.target.checked)
-    //console.log(this.refs.optionCheck.state.isChecked)
-    // this.setState({
-    //   isChecked: !this.state.isChecked
-    // }, function() {
-    //   console.log(this.props);
-    // }.bind(this));
+  toggleCheckboxChange(e) {
+    let isChecked = e.target.checked;
 
-    this.setState({
-      complete: !this.refs.complete.state.checked
-    });
+    this.props.handleCheckboxChange(this.props, isChecked)
+
   }
 
   render() {
+    const value = this.props.value;
+    const label= this.props.name;
 
-    // 체크가 된 정보를 배열에 넣음.
     let optionLabelStyle = {
       display: 'block',
       width: '100%',
@@ -158,14 +195,13 @@ class SelectOptionItem extends  Component {
           {this.props.multiOption ?
             <label style={optionLabelStyle}>
               <input type="checkbox"
-                     defaultChecked={this.state.complete}
-                     ref="complete"
-                     onChange={this.handleChange}
+                     value={value}
+                     onChange={this.toggleCheckboxChange.bind(this)}
               />
-              {this.props.name}
+              &nbsp;{label}
             </label>
             :
-            <span style={optionLabelStyle} onClick={this.getListValue.bind(this)}>{this.props.name}</span>
+            <span style={optionLabelStyle} onClick={this.getListValue.bind(this)}>{label}</span>
           }
         </li>
     );
