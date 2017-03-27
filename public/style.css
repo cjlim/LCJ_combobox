@@ -42,7 +42,8 @@ ul,li{
   position: relative;
   min-height: 36px;
   box-sizing: border-box;
-  padding: 10px 20px 10px 5px;
+  padding: 8px 20px 8px 5px;
+  line-height: 20px;
   white-space: normal;
   word-break: break-all;
   z-index: 2;
