@@ -43,6 +43,8 @@ ul,li{
   min-height: 36px;
   box-sizing: border-box;
   padding: 10px 20px 10px 5px;
+  white-space: normal;
+  word-break: break-all;
   z-index: 2;
   font-family: inherit;
 }

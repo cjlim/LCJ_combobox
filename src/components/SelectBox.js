@@ -102,7 +102,6 @@ class SelectBox extends  Component {
   }
 
   render(){
-
     let selectStyle = {
       position: 'relative',
       width: '200px',
