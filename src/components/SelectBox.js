@@ -5,6 +5,9 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import update from 'react-addons-update'
+import styles from './SelectBox.css';
+import classnames from 'classnames';
+
 
 class SelectBox extends  Component {
   constructor(props) {
@@ -18,6 +21,7 @@ class SelectBox extends  Component {
       selectedName: this.props.optionData[0].name,
       selectedKey: -1,
       selectedArray: []
+
     };
   }
 
@@ -102,15 +106,6 @@ class SelectBox extends  Component {
   }
 
   render(){
-    let selectStyle = {
-      position: 'relative',
-      width: '200px',
-      minHeight: '38px',
-      fontFamily: 'inherit',
-      border: '1px solid #999',
-      borderRadius: 0,
-      boxSizing: 'border-box'
-    };
 
     let listTop, boxHeight;
     if(this.state.listPositionTop){
@@ -129,8 +124,8 @@ class SelectBox extends  Component {
     }
 
     return (
-        <div className="ljc-select-box" style={selectStyle}>
-          <div className="lcj-select-label" onClick={this.toggleList.bind(this)} >
+        <div className={classnames("ljc-select-box")}>
+          <div className={classnames("lcj-select-label")} onClick={this.toggleList.bind(this)} >
             {this.props.multiple ?
               selectedNameArr.toString()
               :
@@ -138,7 +133,7 @@ class SelectBox extends  Component {
             }
           </div>
 
-          <div className={"lcj-select-list " + listTop} style={{display: + this.state.listVisible ? "block" : "none", bottom: boxHeight}}>
+          <div className={classnames("lcj-select-list " ,listTop)} style={{display: + this.state.listVisible ? "block" : "none", bottom: boxHeight}}>
             <ul>
               {this.props.optionData.map((option, i) => {
                 return (
@@ -183,16 +178,10 @@ class SelectOptionItem extends  Component {
     const value = this.props.value;
     const label= this.props.name;
 
-    let optionLabelStyle = {
-      display: 'block',
-      width: '100%',
-      height: '100%'
-    };
-
     return(
         <li data-optionValue={this.props.value}>
           {this.props.multiOption ?
-            <label style={optionLabelStyle}>
+            <label>
               <input type="checkbox"
                      value={value}
                      onChange={this.toggleCheckboxChange.bind(this)}

@@ -13,6 +13,7 @@
   "author": "lcj",
   "license": "ISC",
   "dependencies": {
+    "classnames": "^2.2.5",
     "react": "^15.4.2",
     "react-addons-update": "^15.4.2",
     "react-dom": "^15.4.2"
@@ -22,6 +23,8 @@
     "babel-loader": "^6.4.1",
     "babel-preset-es2015": "^6.24.0",
     "babel-preset-react": "^6.23.0",
+    "css-loader": "^0.27.3",
+    "style-loader": "^0.16.0",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.4.2"
   }
