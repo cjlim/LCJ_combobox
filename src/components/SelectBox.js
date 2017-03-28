@@ -24,6 +24,57 @@ class SelectBox extends  Component {
 
     };
   }
+  // componentDidMount() {
+  //   document.addEventListener('click', this.globalMouseClick);
+  // }
+  //
+  // componentWillUnmount() {
+  //   document.removeEventListener('click', this.globalMouseClick);
+  // }
+  //
+  // globalMouseClick(event) {
+  //
+  //   if (event) {
+  //     var target = event.target;
+  //
+  //     // Safety fuse
+  //     let i = 0;
+  //     let hideMenu = true;
+  //
+  //     target = target.parentElement;
+  //     console.log(target.innerHTML)
+  //     console.log(this.refs.SelectBox.innerHTML)
+  //
+  //
+  //     // while (this.checkParentElement(target) && i < 10) {
+  //     //
+  //     //   i++;
+  //     //   console.log(i)
+  //     //   // if (target.innerHTML == this.refs.comboSelect.innerHTML) {
+  //     //   //   hideMenu = false;
+  //     //   // }
+  //     // }
+  //     //
+  //     // if (this.open && hideMenu) {
+  //     //
+  //     //   if (target.className && typeof target.className == 'string' && target.className.indexOf('combo-select-item') > -1) {
+  //     //     // nothing
+  //     //   } else {
+  //     //     event.preventDefault();
+  //     //     this.toggleMenu();
+  //     //   }
+  //     // }
+  //   }
+  // }
+
+  // checkParentElement(target) {
+  //
+  //   if (target.parentElement != null) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   // 클릭시 높이값 계산
   setListPositionTop(box) {
@@ -48,61 +99,79 @@ class SelectBox extends  Component {
   listShow(t) {
     this.setListPositionTop(t);
     this.setState({ listVisible: true });
-    //document.addEventListener("click", this.listHide(), false);
+    //window.addEventListener("click", this.listHide(), false);
   }
 
   listHide() {
     this.setState({ listVisible: false });
     this.setState({ listPositionTop: false });
-    //document.removeEventListener("click", this.listHide(), false);
+    //window.removeEventListener("click", this.listHide(), false);
   }
 
-  _onSelect(propsData){
+  selectOptionItem(optionData, isChecked){
 
-    this.setState({
-      selectedKey: propsData.optionKey,
-      selectedValue: propsData.value,
-      selectedName: propsData.name
-    });
-
-    // 멀티 셀렉트일때는 선택후 닫히지 않음
     if(!this.props.multiple){
+      // 일반
+      this.setState({
+        selectedKey: optionData.optionKey,
+        selectedValue: optionData.value,
+        selectedName: optionData.name
+      }, () => {
+        this.props.onChange ? this.props.onChange(this.state.selectedValue, this.state.selectedName) : '';
+      });
+
       this.listHide();
-    }
-  }
 
-  _isSelectedArr(data, isChecked){
-
-    let arrDate = {
-      index: data.optionKey,
-      name: data.name,
-      value: data.value,
-    };
-
-    if(isChecked){
-      // data update
-      this.setState({
-        selectedArray: update(
-            this.state.selectedArray,
-            {
-              $push: [arrDate]
-            }
-        )
-      });
     }else{
-      //삭제하는 data의 인덱스를 구한다.
-      let index = this.state.selectedArray.findIndex(d => d.index === arrDate.index);
+      // 멀티
+      let arrDate = {
+        index: optionData.optionKey,
+        name: optionData.name,
+        value: optionData.value,
+      };
 
-      // data delete
-      this.setState({
-        selectedArray: update(
-            this.state.selectedArray,
-            {
-              $splice: [[index, 1]]
-            }
-        )
-      });
+      if(isChecked){
+        // data update
+        this.setState({
+          selectedArray: update(
+              this.state.selectedArray,
+              {
+                $push: [arrDate]
+              }
+          )
+        }, () => {
+          let dataValueArray = [];
+          let dataTextArray = [];
+          for(var i in this.state.selectedArray) {
+            dataValueArray.push(this.state.selectedArray[i].value);
+            dataTextArray.push(this.state.selectedArray[i].name);
+          }
+          this.props.onChange ? this.props.onChange(dataValueArray, dataTextArray) : '';
+        });
+      }else{
+        //삭제하는 data의 인덱스를 구한다.
+        let index = this.state.selectedArray.findIndex(d => d.index === arrDate.index);
+
+        // data delete
+        this.setState({
+          selectedArray: update(
+              this.state.selectedArray,
+              {
+                $splice: [[index, 1]]
+              }
+          )
+        }, () => {
+          let dataValueArray = [];
+          let dataTextArray = [];
+          for(var i in this.state.selectedArray) {
+            dataValueArray.push(this.state.selectedArray[i].value);
+            dataTextArray.push(this.state.selectedArray[i].name);
+          }
+          this.props.onChange ? this.props.onChange(dataValueArray, dataTextArray) : '';
+        });
+      }
     }
+
   }
 
   render(){
@@ -129,7 +198,7 @@ class SelectBox extends  Component {
             {this.props.multiple ?
               selectedNameArr.toString()
               :
-              this.state.selectedValue
+              this.state.selectedName
             }
           </div>
 
@@ -143,8 +212,7 @@ class SelectBox extends  Component {
                     key={i}
                     optionKey={i}
                     multiOption={this.props.multiple}
-                    onSelect={this._onSelect.bind(this)}
-                    handleCheckboxChange={this._isSelectedArr.bind(this)}
+                    onSelect={this.selectOptionItem.bind(this)}
                   />
                 );
               })}
@@ -164,14 +232,9 @@ class SelectOptionItem extends  Component {
   }
 
   getListValue(e) {
-    this.props.onSelect(this.props);
-  }
-
-  toggleCheckboxChange(e) {
     let isChecked = e.target.checked;
 
-    this.props.handleCheckboxChange(this.props, isChecked)
-
+    this.props.onSelect(this.props, isChecked)
   }
 
   render() {
@@ -184,7 +247,7 @@ class SelectOptionItem extends  Component {
             <label>
               <input type="checkbox"
                      value={value}
-                     onChange={this.toggleCheckboxChange.bind(this)}
+                     onChange={this.getListValue.bind(this)}
               />
               &nbsp;{label}
             </label>

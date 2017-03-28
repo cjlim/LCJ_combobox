@@ -9,25 +9,30 @@ import SelectBox from './components/SelectBox';
 const rootElement = document.getElementById('root');
 
 let optionData = [
-  {value: "aaa" ,name: "aaa"},
-  {value: "bbb" ,name: "bbb"},
-  {value: "ccc" ,name: "ccc"},
-  {value: "ddd" ,name: "ddd"},
-  {value: "eee" ,name: "eee"},
-  {value: "fff" ,name: "fff"},
-  {value: "ggg" ,name: "ggg"},
-  {value: "hhh" ,name: "hhh"},
-  {value: "iii" ,name: "iii"}
+  {value: "option01" ,name: "aaa"},
+  {value: "option02" ,name: "bbb"},
+  {value: "option03" ,name: "ccc"},
+  {value: "option04" ,name: "ddd"},
+  {value: "option05" ,name: "eee"},
+  {value: "option06" ,name: "fff"},
+  {value: "option07" ,name: "ggg"},
+  {value: "option08" ,name: "hhh"},
+  {value: "option09" ,name: "iii"}
 ];
+
+function fakeFunction(value, text) {
+  console.log(value)
+  console.log(text)
+};
 
 ReactDOM.render(
     <div>
-      <SelectBox optionData={optionData} multiple />
+      <SelectBox optionData={optionData} multiple onChange={fakeFunction} />
       <br />
       <br />
       <br />
       <br />
-      <SelectBox optionData={optionData} />
+      <SelectBox optionData={optionData} onChange={fakeFunction} />
     </div>
 
     , rootElement
