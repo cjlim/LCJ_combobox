@@ -189,7 +189,7 @@ class SelectOptionItem extends  Component {
               &nbsp;{label}
             </label>
             :
-            <span style={optionLabelStyle} onClick={this.getListValue.bind(this)}>{label}</span>
+            <span onClick={this.getListValue.bind(this)}>{label}</span>
           }
         </li>
     );

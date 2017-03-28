@@ -20,4 +20,15 @@ let optionData = [
   {value: "iii" ,name: "iii"}
 ];
 
-ReactDOM.render(<SelectBox optionData={optionData} multiple />, rootElement);
+ReactDOM.render(
+    <div>
+      <SelectBox optionData={optionData} multiple />
+      <br />
+      <br />
+      <br />
+      <br />
+      <SelectBox optionData={optionData} />
+    </div>
+
+    , rootElement
+);
