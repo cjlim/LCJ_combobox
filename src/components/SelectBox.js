@@ -3,7 +3,7 @@
  */
 
 import React, { Component } from 'react';
-import { render } from 'react-dom';
+import ReactDOM, { render } from 'react-dom';
 import update from 'react-addons-update'
 import styles from './SelectBox.css';
 import classnames from 'classnames';
@@ -18,63 +18,33 @@ class SelectBox extends  Component {
       listPositionTop: false,
       selectBoxHeight: null,
       selectedValue: this.props.optionData[0].value,
-      selectedName: this.props.optionData[0].name,
+      selectedLabel: this.props.optionData[0].label,
       selectedKey: -1,
       selectedArray: []
-
     };
-  }
-  // componentDidMount() {
-  //   document.addEventListener('click', this.globalMouseClick);
-  // }
-  //
-  // componentWillUnmount() {
-  //   document.removeEventListener('click', this.globalMouseClick);
-  // }
-  //
-  // globalMouseClick(event) {
-  //
-  //   if (event) {
-  //     var target = event.target;
-  //
-  //     // Safety fuse
-  //     let i = 0;
-  //     let hideMenu = true;
-  //
-  //     target = target.parentElement;
-  //     console.log(target.innerHTML)
-  //     console.log(this.refs.SelectBox.innerHTML)
-  //
-  //
-  //     // while (this.checkParentElement(target) && i < 10) {
-  //     //
-  //     //   i++;
-  //     //   console.log(i)
-  //     //   // if (target.innerHTML == this.refs.comboSelect.innerHTML) {
-  //     //   //   hideMenu = false;
-  //     //   // }
-  //     // }
-  //     //
-  //     // if (this.open && hideMenu) {
-  //     //
-  //     //   if (target.className && typeof target.className == 'string' && target.className.indexOf('combo-select-item') > -1) {
-  //     //     // nothing
-  //     //   } else {
-  //     //     event.preventDefault();
-  //     //     this.toggleMenu();
-  //     //   }
-  //     // }
-  //   }
-  // }
 
-  // checkParentElement(target) {
-  //
-  //   if (target.parentElement != null) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
+    this.mounted = true;
+    this.handleDocumentClick = this.handleDocumentClick.bind(this);
+  }
+
+  componentDidMount () {
+    document.addEventListener('click', this.handleDocumentClick, false);
+    document.addEventListener('touchend', this.handleDocumentClick, false);
+  }
+
+  componentWillUnmount () {
+    this.mounted = false;
+    document.removeEventListener('click', this.handleDocumentClick, false);
+    document.removeEventListener('touchend', this.handleDocumentClick, false);
+  }
+
+  handleDocumentClick (event) {
+    if (this.mounted) {
+      if (!ReactDOM.findDOMNode(this).contains(event.target)) {
+        this.setState({ listVisible: false })
+      }
+    }
+  }
 
   // 클릭시 높이값 계산
   setListPositionTop(box) {
@@ -90,6 +60,7 @@ class SelectBox extends  Component {
 
   toggleList(e) {
     if(!this.state.listVisible){
+      e.preventDefault();
       this.listShow(e.target);
     }else{
       this.listHide();
@@ -99,13 +70,11 @@ class SelectBox extends  Component {
   listShow(t) {
     this.setListPositionTop(t);
     this.setState({ listVisible: true });
-    //window.addEventListener("click", this.listHide(), false);
   }
 
   listHide() {
     this.setState({ listVisible: false });
     this.setState({ listPositionTop: false });
-    //window.removeEventListener("click", this.listHide(), false);
   }
 
   selectOptionItem(optionData, isChecked){
@@ -115,9 +84,9 @@ class SelectBox extends  Component {
       this.setState({
         selectedKey: optionData.optionKey,
         selectedValue: optionData.value,
-        selectedName: optionData.name
+        selectedLabel: optionData.label
       }, () => {
-        this.props.onChange ? this.props.onChange(this.state.selectedValue, this.state.selectedName) : '';
+        this.props.onChange ? this.props.onChange(this.state.selectedValue, this.state.selectedLabel) : '';
       });
 
       this.listHide();
@@ -126,7 +95,7 @@ class SelectBox extends  Component {
       // 멀티
       let arrDate = {
         index: optionData.optionKey,
-        name: optionData.name,
+        label: optionData.label,
         value: optionData.value,
       };
 
@@ -144,7 +113,7 @@ class SelectBox extends  Component {
           let dataTextArray = [];
           for(var i in this.state.selectedArray) {
             dataValueArray.push(this.state.selectedArray[i].value);
-            dataTextArray.push(this.state.selectedArray[i].name);
+            dataTextArray.push(this.state.selectedArray[i].label);
           }
           this.props.onChange ? this.props.onChange(dataValueArray, dataTextArray) : '';
         });
@@ -165,7 +134,7 @@ class SelectBox extends  Component {
           let dataTextArray = [];
           for(var i in this.state.selectedArray) {
             dataValueArray.push(this.state.selectedArray[i].value);
-            dataTextArray.push(this.state.selectedArray[i].name);
+            dataTextArray.push(this.state.selectedArray[i].label);
           }
           this.props.onChange ? this.props.onChange(dataValueArray, dataTextArray) : '';
         });
@@ -184,11 +153,11 @@ class SelectBox extends  Component {
       listTop = ""
     }
 
-    let selectedNameArr = [];
+    let selectedLabelArr = [];
     let arrayLength = this.state.selectedArray.length;
     if(arrayLength !== 0){
       for (var i = 0; i < arrayLength; i++) {
-        selectedNameArr.push(this.state.selectedArray[i].name);
+        selectedLabelArr.push(this.state.selectedArray[i].label);
       }
     }
 
@@ -196,9 +165,9 @@ class SelectBox extends  Component {
         <div className={classnames("ljc-select-box")}>
           <div className={classnames("lcj-select-label")} onClick={this.toggleList.bind(this)} >
             {this.props.multiple ?
-              selectedNameArr.toString()
+                selectedLabelArr.toString()
               :
-              this.state.selectedName
+              this.state.selectedLabel
             }
           </div>
 
@@ -208,7 +177,7 @@ class SelectBox extends  Component {
                 return (
                   <SelectOptionItem
                     value={option.value}
-                    name={option.name}
+                    label={option.label}
                     key={i}
                     optionKey={i}
                     multiOption={this.props.multiple}
@@ -239,7 +208,7 @@ class SelectOptionItem extends  Component {
 
   render() {
     const value = this.props.value;
-    const label= this.props.name;
+    const label= this.props.label;
 
     return(
         <li data-optionValue={this.props.value}>

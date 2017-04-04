@@ -9,20 +9,20 @@ import SelectBox from './components/SelectBox';
 const rootElement = document.getElementById('root');
 
 let optionData = [
-  {value: "option01" ,name: "aaa"},
-  {value: "option02" ,name: "bbb"},
-  {value: "option03" ,name: "ccc"},
-  {value: "option04" ,name: "ddd"},
-  {value: "option05" ,name: "eee"},
-  {value: "option06" ,name: "fff"},
-  {value: "option07" ,name: "ggg"},
-  {value: "option08" ,name: "hhh"},
-  {value: "option09" ,name: "iii"}
+  {value: "option01" ,label: "aaa"},
+  {value: "option02" ,label: "bbb"},
+  {value: "option03" ,label: "ccc"},
+  {value: "option04" ,label: "ddd"},
+  {value: "option05" ,label: "eee"},
+  {value: "option06" ,label: "fff"},
+  {value: "option07" ,label: "ggg"},
+  {value: "option08" ,label: "hhh"},
+  {value: "option09" ,label: "iii"}
 ];
 
-function fakeFunction(value, text) {
+function fakeFunction(value, label) {
   console.log(value)
-  console.log(text)
+  console.log(label)
 };
 
 ReactDOM.render(
