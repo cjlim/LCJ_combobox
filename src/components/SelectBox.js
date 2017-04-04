@@ -160,9 +160,11 @@ class SelectBox extends  Component {
 
     let selectedLabel;
     let selectedLabelArr = [];
+    // 기본 텍스트가 있으면 기본테스트가 나오도록 함.
     if(this.props.text && !this.seleced){
       selectedLabel = this.props.text;
     } else {
+      // 기본 텍스트가 없거나, 옵션이 선택되면 그 이후엔 셀렉된 리스트만 나오도록함.
       if(this.props.multiple){
         let arrayLength = this.state.selectedArray.length;
         if(arrayLength !== 0){
@@ -175,10 +177,6 @@ class SelectBox extends  Component {
         selectedLabel = this.state.selectedLabel;
       }
     }
-
-    // 기본 텍스트가 있으면 기본테스트가 나오도록 함.
-    // 옵션이 선택되면 그 이후엔 셀렉된 리스트만 나오도록함.
-    // 멀티시 모두 선택하지 않을때는 기본텍스트가 나오도록 함.
 
     return (
         <div className={classnames("ljc-select-box")}>
