@@ -19,11 +19,13 @@ class SelectBox extends  Component {
       selectBoxHeight: null,
       selectedValue: this.props.optionData[0].value,
       selectedLabel: this.props.optionData[0].label,
+      defaultLabel: this.props.text,
       selectedKey: -1,
       selectedArray: []
     };
 
     this.mounted = true;
+    this.seleced = false;
     this.handleDocumentClick = this.handleDocumentClick.bind(this);
   }
 
@@ -89,6 +91,7 @@ class SelectBox extends  Component {
         this.props.onChange ? this.props.onChange(this.state.selectedValue, this.state.selectedLabel) : '';
       });
 
+      this.seleced = true;
       this.listHide();
 
     }else{
@@ -96,7 +99,7 @@ class SelectBox extends  Component {
       let arrDate = {
         index: optionData.optionKey,
         label: optionData.label,
-        value: optionData.value,
+        value: optionData.value
       };
 
       if(isChecked){
@@ -109,14 +112,9 @@ class SelectBox extends  Component {
               }
           )
         }, () => {
-          let dataValueArray = [];
-          let dataTextArray = [];
-          for(var i in this.state.selectedArray) {
-            dataValueArray.push(this.state.selectedArray[i].value);
-            dataTextArray.push(this.state.selectedArray[i].label);
-          }
-          this.props.onChange ? this.props.onChange(dataValueArray, dataTextArray) : '';
+          this.setSelectedArray();
         });
+        this.seleced = true;
       }else{
         //삭제하는 data의 인덱스를 구한다.
         let index = this.state.selectedArray.findIndex(d => d.index === arrDate.index);
@@ -130,17 +128,24 @@ class SelectBox extends  Component {
               }
           )
         }, () => {
-          let dataValueArray = [];
-          let dataTextArray = [];
-          for(var i in this.state.selectedArray) {
-            dataValueArray.push(this.state.selectedArray[i].value);
-            dataTextArray.push(this.state.selectedArray[i].label);
-          }
-          this.props.onChange ? this.props.onChange(dataValueArray, dataTextArray) : '';
+          this.setSelectedArray();
         });
+
+        if(this.state.selectedArray.length <= 1){
+          this.seleced = false;
+        }
       }
     }
+  }
 
+  setSelectedArray(){
+    let dataValueArray = [];
+    let dataTextArray = [];
+    for(var i in this.state.selectedArray) {
+      dataValueArray.push(this.state.selectedArray[i].value);
+      dataTextArray.push(this.state.selectedArray[i].label);
+    }
+    this.props.onChange ? this.props.onChange(dataValueArray, dataTextArray) : '';
   }
 
   render(){
@@ -153,22 +158,32 @@ class SelectBox extends  Component {
       listTop = ""
     }
 
+    let selectedLabel;
     let selectedLabelArr = [];
-    let arrayLength = this.state.selectedArray.length;
-    if(arrayLength !== 0){
-      for (var i = 0; i < arrayLength; i++) {
-        selectedLabelArr.push(this.state.selectedArray[i].label);
+    if(this.props.text && !this.seleced){
+      selectedLabel = this.props.text;
+    } else {
+      if(this.props.multiple){
+        let arrayLength = this.state.selectedArray.length;
+        if(arrayLength !== 0){
+          for (var i = 0; i < arrayLength; i++) {
+            selectedLabelArr.push(this.state.selectedArray[i].label);
+          }
+        }
+        selectedLabel = selectedLabelArr.toString()
+      } else {
+        selectedLabel = this.state.selectedLabel;
       }
     }
+
+    // 기본 텍스트가 있으면 기본테스트가 나오도록 함.
+    // 옵션이 선택되면 그 이후엔 셀렉된 리스트만 나오도록함.
+    // 멀티시 모두 선택하지 않을때는 기본텍스트가 나오도록 함.
 
     return (
         <div className={classnames("ljc-select-box")}>
           <div className={classnames("lcj-select-label")} onClick={this.toggleList.bind(this)} >
-            {this.props.multiple ?
-                selectedLabelArr.toString()
-              :
-              this.state.selectedLabel
-            }
+            {selectedLabel}
           </div>
 
           <div className={classnames("lcj-select-list " ,listTop)} style={{display: + this.state.listVisible ? "block" : "none", bottom: boxHeight}}>

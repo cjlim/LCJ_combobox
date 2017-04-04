@@ -27,12 +27,12 @@ function fakeFunction(value, label) {
 
 ReactDOM.render(
     <div>
-      <SelectBox optionData={optionData} multiple onChange={fakeFunction} />
+      <SelectBox text="- select -" optionData={optionData} multiple onChange={fakeFunction} />
       <br />
       <br />
       <br />
       <br />
-      <SelectBox optionData={optionData} onChange={fakeFunction} />
+      <SelectBox text="- select -" optionData={optionData} onChange={fakeFunction} />
     </div>
 
     , rootElement
