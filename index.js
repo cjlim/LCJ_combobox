@@ -4,7 +4,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import SelectBox from './components/SelectBox';
+import SelectBox from './src/components/SelectBox';
 
 const rootElement = document.getElementById('root');
 

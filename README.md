@@ -1,2 +1,2 @@
-REACT SMART COMBO BOX
+REACT LCJ COMBO BOX
 =================

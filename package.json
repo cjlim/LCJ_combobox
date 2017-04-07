@@ -1,17 +1,26 @@
 {
-  "name": "lcj-combo",
-  "version": "0.0.1",
+  "name": "lcj-combobox",
+  "version": "0.1.0",
   "description": "combobox",
-  "main": "index.js",
-  "style": "style.css",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/cjlim/LCJ_combobox.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cjlim/LCJ_combobox/issues"
+  },
+  "main": "SelectBox.js",
+  "style": "SelectBox.css",
   "scripts": {
     "start": "webpack-dev-server"
   },
   "keywords": [
-    "combobox"
+    "react",
+    "combobox",
+    "select"
   ],
   "author": "lcj",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "classnames": "^2.2.5",
     "react": "^15.4.2",

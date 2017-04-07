@@ -204,9 +204,12 @@ class SelectBox extends  Component {
     );
   }
 }
-// SelectBox.propTypes = {
-//   optionData: React.PropTypes.arrayOf(React.PropTypes.object)
-// };
+SelectBox.propTypes = {
+  optionData: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
+  text: React.PropTypes.string,
+  multiple: React.PropTypes.bool,
+  onChange: React.PropTypes.func
+};
 
 class SelectOptionItem extends  Component {
   constructor(props) {
@@ -240,9 +243,12 @@ class SelectOptionItem extends  Component {
     );
   }
 }
-// SelectOptionItem.propTypes = {
-//   value: React.PropTypes.string.isRequired,
-//   name: React.PropTypes.string.isRequired
-// };
+SelectOptionItem.propTypes = {
+  value: React.PropTypes.string.isRequired,
+  label: React.PropTypes.string.isRequired,
+  optionKey: React.PropTypes.number,
+  multiOption: React.PropTypes.bool,
+  onSelect: React.PropTypes.func
+};
 
 export default SelectBox;
